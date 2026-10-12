@@ -1,0 +1,42 @@
+name: بناء لوحة المفاتيح السوننكية العربية
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'SoninkeArabicKeyboard_Project.zip'
+      - '.github/workflows/build.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: تنزيل ملفات المشروع
+        uses: actions/checkout@v4
+
+      - name: إعداد جافا
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: إعداد Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - name: فك ضغط المشروع
+        run: |
+          unzip -o SoninkeArabicKeyboard_Project.zip
+          ls -la
+          find . -maxdepth 3 -name settings.gradle -o -name settings.gradle.kts
+
+      - name: بناء التطبيق
+        run: |
+          gradle -p soninke_project assembleDebug
+
+      - name: حفظ ملف APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: لوحة-المفاتيح-السوننكية-العربية
+          path: soninke_project/app/build/outputs/apk/debug/app-debug.apk
