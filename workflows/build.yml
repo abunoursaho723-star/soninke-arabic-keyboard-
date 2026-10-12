@@ -1,0 +1,19 @@
+
+name: بناء لوحة المفاتيح السوننكية العربية
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: تنزيل ملفات المشروع
+        uses: actions/checkout@v4
+
+      - name: عرض ملفات المستودع
+        run: |
+          echo "تم الوصول إلى المستودع"
+          ls -la
+          find . -maxdepth 4 -type f
+
